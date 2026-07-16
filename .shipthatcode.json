@@ -1,0 +1,7 @@
+{
+  "course": "build-bloom-filter",
+  "language": "rust",
+  "language_id": 73,
+  "entrypoint": "main.rs",
+  "version": 1
+}
