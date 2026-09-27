@@ -20,7 +20,9 @@ fn main() {
     }
 }
 
-enum Command {}
+enum Command {
+    INIT { n: u32, fp: f64 },
+}
 struct BloomFilter {
     m: u32,
     k: u32,
