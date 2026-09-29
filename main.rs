@@ -4,9 +4,18 @@ use std::io::{self, BufRead};
 
 fn parse(command: &str) -> Result<Command, String> {
     let parts: Vec<&str> = command.split(' ').collect();
-    Err(String::from("Not implemented"))
+    match parts[0] {
+        "INIT" => {
+            let n = parts[1].parse::<u32>().unwrap_or(0);
+            let fp = parts[2].parse::<f64>().unwrap_or(0.0);
+
+            Ok(Command::INIT { n, fp })
+        }
+        _ => Err(String::from("Error")),
+    }
 }
 fn main() {
+    let mut bf: BloomFilter;
     let stdin = io::stdin();
     for line in stdin.lock().lines() {
         let l = line.unwrap();
@@ -14,14 +23,28 @@ fn main() {
             continue;
         }
 
-        let _ = parse(&l);
+        let command = parse(&l);
 
-        println!("TODO");
+        match command {
+            Ok(c) => match c {
+                Command::INIT { n, fp } => {
+                    bf = BloomFilter::new(n, fp);
+                    println!("OK m={} k={}", bf.m, bf.k);
+                }
+                Command::UKNOWN => {
+                    println!("UKNOWN");
+                }
+            },
+            _ => {
+                println!("TODO");
+            }
+        }
     }
 }
 
 enum Command {
     INIT { n: u32, fp: f64 },
+    UKNOWN,
 }
 struct BloomFilter {
     m: u32,
