@@ -60,12 +60,8 @@ impl BloomFilter {
         let en = -1 * n as i32;
 
         let m = ((en as f64 * fp.ln()) / (2_f64.ln().powi(2))).ceil() as u32;
-        // k = round( (m/n) * ln(2))
-        // (m as f64 / n as f64 ) *
-        let kd = ((m as f64 / n as f64) * 2.0_f64.ln()).round();
 
-        println!("{}", kd);
-        let k = ((m / n) as f64 * 2.0_f64.ln()).round() as u32;
+        let k = ((m as f64 / n as f64) * 2.0_f64.ln()).round() as u32;
         let c = 0;
         Self { m, k, n, c, fp }
     }
