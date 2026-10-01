@@ -5,12 +5,19 @@ use std::io::{self, BufRead};
 fn parse(command: &str) -> Result<Command, String> {
     let parts: Vec<&str> = command.split(' ').collect();
     match parts[0] {
+        "ADD" => Ok(Command::ADD {
+            key: String::from(parts[1]),
+        }),
+        "CHECK" => Ok(Command::CHECK {
+            key: String::from(parts[1]),
+        }),
         "INIT" => {
             let n = parts[1].parse::<u32>().unwrap_or(0);
             let fp = parts[2].parse::<f64>().unwrap_or(0.0);
 
             Ok(Command::INIT { n, fp })
         }
+        "STATS" => Ok(Command::STATS),
         _ => Err(String::from("Error")),
     }
 }
@@ -31,11 +38,11 @@ fn main() {
                     bf = BloomFilter::new(n, fp);
                     println!("OK m={} k={}", bf.m, bf.k);
                 }
-                Command::UKNOWN => {
-                    println!("UKNOWN");
+                _ => {
+                    println!("UNHandled")
                 }
             },
-            _ => {
+            Err(_) => {
                 println!("TODO");
             }
         }
@@ -43,10 +50,13 @@ fn main() {
 }
 
 enum Command {
+    ADD { key: String },
+    CHECK { key: String },
     INIT { n: u32, fp: f64 },
-    UKNOWN,
+    STATS,
 }
 struct BloomFilter {
+    v: Vec<u8>,
     m: u32,
     k: u32,
     n: u32,
@@ -63,6 +73,13 @@ impl BloomFilter {
 
         let k = ((m as f64 / n as f64) * 2.0_f64.ln()).round() as u32;
         let c = 0;
-        Self { m, k, n, c, fp }
+        Self {
+            v: vec![0; m as usize],
+            m,
+            k,
+            n,
+            c,
+            fp,
+        }
     }
 }
