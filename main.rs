@@ -82,4 +82,12 @@ impl BloomFilter {
             fp,
         }
     }
+
+    fn add(&mut self, key: String) -> () {}
+    fn check(&mut self, key: String) -> () {}
+    fn stats(&self) -> () {}
+
+    fn ha(key: String) -> () {}
+
+    fn hb(key: String) -> () {}
 }
